@@ -9,12 +9,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 import it.polito.tdp.flightdelays.model.Airline;
+import it.polito.tdp.flightdelays.model.AirlineIdMap;
 import it.polito.tdp.flightdelays.model.Airport;
+import it.polito.tdp.flightdelays.model.AirportIdMap;
 import it.polito.tdp.flightdelays.model.Flight;
+import it.polito.tdp.flightdelays.model.FlightIdMap;
 
 public class FlightDelaysDAO {
 
-	public List<Airline> loadAllAirlines() {
+	public List<Airline> loadAllAirlines(AirlineIdMap aIdMap) {
 		String sql = "SELECT id, airline from airlines";
 		List<Airline> result = new ArrayList<Airline>();
 
@@ -24,7 +27,10 @@ public class FlightDelaysDAO {
 			ResultSet rs = st.executeQuery();
 
 			while (rs.next()) {
-				result.add(new Airline(rs.getInt("ID"), rs.getString("airline")));
+			
+				Airline airline = new Airline(rs.getString("ID"), rs.getString("airline"));
+				
+				result.add(aIdMap.getAirline(airline));
 			}
 
 			conn.close();
@@ -37,7 +43,7 @@ public class FlightDelaysDAO {
 		}
 	}
 
-	public List<Airport> loadAllAirports() {
+	public List<Airport> loadAllAirports(AirportIdMap aIdMap) {
 		String sql = "SELECT id, airport, city, state, country, latitude, longitude FROM airports";
 		List<Airport> result = new ArrayList<Airport>();
 		
@@ -47,9 +53,11 @@ public class FlightDelaysDAO {
 			ResultSet rs = st.executeQuery();
 
 			while (rs.next()) {
+				
 				Airport airport = new Airport(rs.getInt("id"), rs.getString("airport"), rs.getString("city"),
 						rs.getString("state"), rs.getString("country"), rs.getDouble("latitude"), rs.getDouble("longitude"));
-				result.add(airport);
+				
+				result.add(aIdMap.getAirport(airport));
 			}
 			
 			conn.close();
@@ -62,7 +70,7 @@ public class FlightDelaysDAO {
 		}
 	}
 
-	public List<Flight> loadAllFlights() {
+	public List<Flight> loadAllFlights(AirlineIdMap aLIdMap, FlightIdMap fIdMap, AirportIdMap aPIdMap) {
 		String sql = "SELECT id, airline, flight_number, origin_airport_id, destination_airport_id, scheduled_dep_date, "
 				+ "arrival_date, departure_delay, arrival_delay, air_time, distance FROM flights";
 		List<Flight> result = new LinkedList<Flight>();
@@ -73,8 +81,14 @@ public class FlightDelaysDAO {
 			ResultSet rs = st.executeQuery();
 
 			while (rs.next()) {
-				Flight flight = new Flight(rs.getInt("id"), rs.getString("airline"), rs.getInt("flight_number"),
-						rs.getString("origin_airport_id"), rs.getString("destination_airport_id"),
+				
+				Airport airportOrigin = aPIdMap.getAirportByID(rs.getInt("origin_airport_id"));
+				Airport airportDestination = aPIdMap.getAirportByID(rs.getInt("destination_airport_id"));
+				Airline airline = aLIdMap.getAirlineByID(rs.getString("airline"));
+
+				
+				Flight flight = new Flight(rs.getInt("id"), airline, rs.getInt("flight_number"),
+						airportOrigin, airportDestination,
 						rs.getTimestamp("scheduled_dep_date").toLocalDateTime(),
 						rs.getTimestamp("arrival_date").toLocalDateTime(), rs.getInt("departure_delay"),
 						rs.getInt("arrival_delay"), rs.getInt("air_time"), rs.getInt("distance"));
