@@ -54,7 +54,7 @@ public class FlightDelaysDAO {
 
 			while (rs.next()) {
 				
-				Airport airport = new Airport(rs.getInt("id"), rs.getString("airport"), rs.getString("city"),
+				Airport airport = new Airport(rs.getString("id"), rs.getString("airport"), rs.getString("city"),
 						rs.getString("state"), rs.getString("country"), rs.getDouble("latitude"), rs.getDouble("longitude"));
 				
 				result.add(aIdMap.getAirport(airport));
@@ -82,8 +82,8 @@ public class FlightDelaysDAO {
 
 			while (rs.next()) {
 				
-				Airport airportOrigin = aPIdMap.getAirportByID(rs.getInt("origin_airport_id"));
-				Airport airportDestination = aPIdMap.getAirportByID(rs.getInt("destination_airport_id"));
+				Airport airportOrigin = aPIdMap.getAirportByID(rs.getString("origin_airport_id"));
+				Airport airportDestination = aPIdMap.getAirportByID(rs.getString("destination_airport_id"));
 				Airline airline = aLIdMap.getAirlineByID(rs.getString("airline"));
 
 				
@@ -103,5 +103,10 @@ public class FlightDelaysDAO {
 			System.out.println("Errore connessione al database");
 			throw new RuntimeException("Error Connection Database");
 		}
+	}
+	
+	
+	public void name() {
+		
 	}
 }

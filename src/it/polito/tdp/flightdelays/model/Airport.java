@@ -2,7 +2,7 @@ package it.polito.tdp.flightdelays.model;
 
 public class Airport {
 
-	private int id;
+	private String id;
 	private String name;
 	private String city;
 	private String state;
@@ -10,7 +10,7 @@ public class Airport {
 	private double latitude;
 	private double longitude;
 	
-	public Airport(int id, String name, String city, String state, String country, double latitude,
+	public Airport(String id, String name, String city, String state, String country, double latitude,
 			double longitude) {
 		this.id = id;
 		this.name = name;
@@ -21,11 +21,11 @@ public class Airport {
 		this.longitude = longitude;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -90,7 +90,7 @@ public class Airport {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -103,10 +103,15 @@ public class Airport {
 		if (getClass() != obj.getClass())
 			return false;
 		Airport other = (Airport) obj;
-		if (id != other.id)
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
+
+	
 	
 	
 	
