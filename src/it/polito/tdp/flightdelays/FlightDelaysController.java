@@ -1,17 +1,24 @@
 package it.polito.tdp.flightdelays;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.flightdelays.model.Airline;
 import it.polito.tdp.flightdelays.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 public class FlightDelaysController {
+	
+	private Model m;
+	private List<Airline> boxAirline;
+
 
     @FXML
     private ResourceBundle resources;
@@ -23,7 +30,7 @@ public class FlightDelaysController {
     private TextArea txtResult;
 
     @FXML
-    private ComboBox<?> cmbBoxLineaAerea;
+    private ComboBox<Airline> cmbBoxLineaAerea;
 
     @FXML
     private Button caricaVoliBtn;
@@ -36,7 +43,12 @@ public class FlightDelaysController {
 
     @FXML
     void doCaricaVoli(ActionEvent event) {
-    		System.out.println("Carica voli!");
+    	
+    	Airline a = this.cmbBoxLineaAerea.getValue();
+    	
+    	m.createGraph(a);
+    	m.creaEOrdinaRotte();
+    	this.txtResult.setText(m.stampaLeDieciPeggioriRotte());
     }
 
     @FXML
@@ -55,6 +67,10 @@ public class FlightDelaysController {
     }
     
 	public void setModel(Model model) {
-		// TODO Auto-generated method stub
+
+		this.m = model;
+		
+		this.boxAirline = m.getAirlines();
+		this.cmbBoxLineaAerea.getItems().addAll(boxAirline);
 	}
 }

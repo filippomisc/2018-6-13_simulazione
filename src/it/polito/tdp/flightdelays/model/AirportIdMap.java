@@ -4,14 +4,14 @@ import java.util.*;
 
 public class AirportIdMap {
 	
-private Map<String, Airport> airports;
+private Map<Integer, Airport> airports;
 	
 	public AirportIdMap() {
 		this.airports = new HashMap<>();
 	}	
 
 	
-	public Airport getAirportByID(String id) {
+	public Airport getAirportByID(int id) {
 		return this.airports.get(id);
 	}
 	
@@ -24,8 +24,12 @@ private Map<String, Airport> airports;
 		return old;
 	}
 	
-	public void put(Airport a, String airlineId) {
+	public void put(Airport a, int airlineId) {
 		this.airports.put(airlineId, a);
+	}
+	
+	public boolean containsKey(int id) {
+		return airports.containsKey(id);
 	}
 	
 

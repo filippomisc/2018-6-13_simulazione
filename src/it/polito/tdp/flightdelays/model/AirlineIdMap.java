@@ -5,14 +5,14 @@ import java.util.Map;
 
 public class AirlineIdMap {
 
-private Map<String, Airline> airline;
+private Map<Integer, Airline> airline;
 	
 	public AirlineIdMap() {
 		this.airline = new HashMap<>();
 	}	
 
 	
-	public Airline getAirlineByID(String id) {
+	public Airline getAirlineByID(int id) {
 		return this.airline.get(id);
 	}
 	
@@ -25,7 +25,7 @@ private Map<String, Airline> airline;
 		return old;
 	}
 	
-	public void put(Airline a, String airlineid) {
+	public void put(Airline a, int airlineid) {
 		this.airline.put(airlineid, a);
 	}
 	
